@@ -7,13 +7,30 @@ connect(process.env.MONGO_URL, {
 })
 
 class CaseProvider {
-  async createCase (data) {
+  async createCase(data) {
     try {
       const newCase = new CaseModel(data)
-      const result = await newCase.save()
-      return result
+      return await newCase.save()
     } catch (err) {
       console.log(`Error: ${err}`)
+    }
+  }
+
+  async getCaseById(id) {
+    try {
+      const result = await CaseModel.findById(id)
+      return result
+    } catch (error) {
+      console.log(`Error: ${error}`)
+    }
+  }
+
+  async getAllCases() {
+    try {
+      const result = await CaseModel.find()
+      return result
+    } catch (error) {
+      console.log(`Error: ${error}`)
     }
   }
 }

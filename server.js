@@ -2,20 +2,33 @@ const express = require('express')
 const dotenv = require('dotenv')
 dotenv.config()
 
-const datito = require('./prueba.json')
-const CaseProvider = require('./src/entities/providers/CaseProvider')
-
+const CaseService = require('./src/entities/services/CaseService')
+const services = new CaseService()
 const port = process.env.PORT || process.env.DEFAULT_PORT
 const app = express()
 
-app.disable('x-powered-by')
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 app.use(express.static('public'))
+app.disable('x-powered-by')
 
-app.get('/', async (req, res) => {
-  const caseProvider = new CaseProvider()
+app.get('/', (req, res) => {
+  res.json({ message: 'Hello World!' })
+})
 
-  const result = await caseProvider.createCase(datito)
-  res.json({ result: `Creado correctamente bajo el id: ${result._id}` })
+app.get('/api/cases/:id', async (req, res) => {
+  const result = await services.getCaseById(req.params.id)
+  res.json(result)
+})
+
+app.get('/api/cases', async (req, res) => {
+  const result = await services.getAllCases()
+  res.json(result)
+})
+
+app.post('/api/cases', async (req, res) => {
+  const result = await services.createCase(req.body)
+  res.json(result)
 })
 
 app.get('*', (req, res) => {
@@ -23,5 +36,5 @@ app.get('*', (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log(`App listening on url http://localhost:${port}`)
+  console.log(`App listening on port ${port}`)
 })
