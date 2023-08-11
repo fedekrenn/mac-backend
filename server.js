@@ -4,12 +4,10 @@ dotenv.config()
 
 const CaseService = require('./src/entities/services/CaseService')
 const services = new CaseService()
-const port = process.env.PORT || process.env.DEFAULT_PORT
+const port = process.env.PORT ?? process.env.DEFAULT_PORT
 const app = express()
 
 app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-app.use(express.static('public'))
 app.disable('x-powered-by')
 
 app.get('/', (req, res) => {
