@@ -2,13 +2,14 @@ const express = require('express')
 const dotenv = require('dotenv')
 dotenv.config()
 
-const port = process.env.PORT || process.env.DEFAULT_PORT
+const port = process.env.PORT ?? process.env.DEFAULT_PORT
 const app = express()
 
 const { caseRouter } = require('./src/api/routes/CaseRoutes')
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(express.static('public'))
 app.disable('x-powered-by')
 
 app.use('/api/cases', caseRouter)
